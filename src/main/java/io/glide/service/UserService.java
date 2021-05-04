@@ -2,6 +2,7 @@ package io.glide.service;
 
 import io.glide.boot.api.dto.UserRegistrationDto;
 import io.glide.boot.domain.User;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
