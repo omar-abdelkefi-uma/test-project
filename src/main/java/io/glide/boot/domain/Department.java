@@ -1,6 +1,7 @@
 package io.glide.boot.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.Set;
@@ -8,12 +9,19 @@ import java.util.Set;
 @Entity
 public class Department {
 
-  @Id private Long id;
+  @Id @GeneratedValue private Long id;
 
   private String name;
 
-//  @OneToMany
+  @OneToMany
   private Set<User> users;
+
+  public Department() {
+  }
+
+  public Department(String name) {
+    this.name = name;
+  }
 
   public Long getId() {
     return id;
@@ -37,5 +45,14 @@ public class Department {
 
   public void setUsers(final Set<User> users) {
     this.users = users;
+  }
+
+  @Override
+  public String toString() {
+    return "Department{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+//            ", users=" + users +
+            '}';
   }
 }

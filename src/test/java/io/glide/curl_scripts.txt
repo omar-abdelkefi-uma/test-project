@@ -1,0 +1,16 @@
+###
+POST http://localhost:8080/users/register
+Content-Type:  application/json
+
+{
+  "firstName":"Jack",
+  "lastName":"Sparrow",
+  "department":"RH",
+  "principalAddress": {
+    "streetName":"20 Rue de Voltaire",
+    "postalCode":"75015",
+    "city": "Paris",
+    "country": "France"
+  },
+  "secondaryAddress":{}
+}

@@ -1,8 +1,8 @@
-package io.glide.service;
+package io.glide.boot.service.impl;
 
-import io.glide.boot.api.dto.UserRegistrationDto;
 import io.glide.boot.domain.User;
-import org.springframework.stereotype.Service;
+import io.glide.boot.exception.ResourceNotFoundException;
+import io.glide.boot.exception.ResourceNotSavedException;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -16,7 +16,7 @@ public interface UserService {
    * @param userRegistrationDto dto for user registration.
    * @return user entity.
    */
-  User registerUser(@NotNull @Valid UserRegistrationDto userRegistrationDto);
+  Mono<User> registerUser(@NotNull @Valid User userRegistrationDto) throws ResourceNotSavedException;
 
   /**
    * Get user by its id.
@@ -24,5 +24,6 @@ public interface UserService {
    * @param id user id.
    * @return user entity.
    */
-  Mono<User> getById(long id);
+  Mono<User> getById(long id) throws ResourceNotFoundException;
+
 }

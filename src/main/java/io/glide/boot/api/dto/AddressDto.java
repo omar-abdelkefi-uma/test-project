@@ -7,7 +7,7 @@ public class AddressDto {
 
   private String streetNumber;
 
-  String streetName;
+  private String streetName;
 
   @NotEmpty
   @Size(max = 40)
@@ -59,5 +59,16 @@ public class AddressDto {
 
   public void setCountry(final String country) {
     this.country = country;
+  }
+
+  @Override
+  public String toString() {
+    return "AddressDto{" +
+            "streetNumber='" + streetNumber + '\'' +
+            ", streetName='" + streetName + '\'' +
+            ", city='" + city + '\'' +
+            ", postalCode='" + postalCode + '\'' +
+            ", country='" + country + '\'' +
+            '}';
   }
 }

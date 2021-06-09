@@ -1,17 +1,19 @@
-package io.glide.service.impl;
+package io.glide.boot.service.impl;
 
 import io.glide.boot.api.dto.AddressDto;
 import io.glide.boot.api.dto.UserRegistrationDto;
 import io.glide.boot.domain.Address;
 import io.glide.boot.domain.Department;
 import io.glide.boot.domain.User;
+import io.glide.boot.exception.ResourceNotFoundException;
+import io.glide.boot.exception.ResourceNotSavedException;
 import io.glide.boot.repository.UserRepository;
-import io.glide.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.Optional;
@@ -26,7 +28,7 @@ class UserServiceImplTest {
 
   @Mock private UserRepository userRepository;
 
-  @InjectMocks private UserService userService;
+  @InjectMocks private UserServiceImpl userService;
 
   @BeforeEach
   void setUp() {
@@ -34,10 +36,10 @@ class UserServiceImplTest {
   }
 
   @Test
-  void Should_RegisterNewUser_When_RegisterUser() {
+  void Should_RegisterNewUser_When_RegisterUser() throws ResourceNotSavedException {
     // Given
     final AddressDto addressDto = new AddressDto();
-    addressDto.setStreetName("20");
+    addressDto.setStreetNumber("20");
     addressDto.setStreetName("Rue de Voltaire");
     addressDto.setPostalCode("75015");
     addressDto.setCity("Paris");
@@ -58,6 +60,7 @@ class UserServiceImplTest {
     address.setCity(userRegistrationDto.getPrincipalAddress().getCity());
     address.setCountry(userRegistrationDto.getPrincipalAddress().getCountry());
     final User user = new User();
+    user.setId(12345L);
     user.setFirstName(userRegistrationDto.getFirstName());
     user.setLastName(userRegistrationDto.getLastName());
     user.setDepartment(department);
@@ -66,14 +69,20 @@ class UserServiceImplTest {
     when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
 
     // When
-    final User result = userService.registerUser(userRegistrationDto);
+    final Mono<User> userMono = userService.registerUser(user);
 
     // Then
-    assertNotNull(result);
     verify(userRepository, times(1)).save(any(User.class));
-    assertNotNull(result.getId());
-    user.setId(result.getId());
-    assertEquals(user, result);
+
+    StepVerifier.create(userMono)
+            .assertNext(result -> {
+              // Then
+              assertNotNull(result);
+              assertNotNull(result.getId());
+              assertNotNull(result.getAddresses());
+              user.setId(result.getId());
+              assertEquals(user, result);
+            }).verifyComplete();
   }
 
   @Test
@@ -96,13 +105,16 @@ class UserServiceImplTest {
 
     when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
 
-    // When && Then
-    StepVerifier.create(userService.getById(user.getId()))
-        .assertNext(
-            usr -> {
-              assertNotNull(usr);
-              assertEquals(user, usr);
-            })
-        .verifyComplete();
+    // When &&
+    try {
+      StepVerifier.create(userService.getById(user.getId()))
+          .assertNext( result -> {
+                // Then
+                assertNotNull(result);
+                assertEquals(user, result);
+          }).verifyComplete();
+    } catch (ResourceNotFoundException e) {
+      e.printStackTrace();
+    }
   }
 }

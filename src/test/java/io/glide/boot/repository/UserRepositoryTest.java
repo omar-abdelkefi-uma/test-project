@@ -2,11 +2,16 @@ package io.glide.boot.repository;
 
 import io.glide.boot.domain.Address;
 import io.glide.boot.domain.User;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.util.Optionals;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import java.util.Optional;
 
@@ -16,69 +21,63 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 class UserRepositoryTest {
+  Address address;
+  User user;
 
   @Autowired private UserRepository userRepository;
 
-  @Test
-  void Should_PersistNewUser_When_Save() {
+  @BeforeEach
+  void init(){
     // Given
-    final Address address = new Address();
+    address = new Address();
     address.setStreetNumber("22");
     address.setStreetName("Rue Voltaire");
     address.setPostalCode("75012");
     address.setCity("Paris");
     address.setCountry("France");
 
-    final User user = new User();
-    user.setId(12345L);
+    user = new User();
+    user.setId(1L);
     user.setFirstName("Jack");
     user.setLastName("Sparrow");
     user.setAddresses(singleton(address));
+  }
 
-    // When
-    final User result = userRepository.save(user);
+  @Test
+  void Should_PersistNewUser_When_Save() {
+    // when
+    StepVerifier.create(Mono.just(userRepository.save(user)))
+            .assertNext(result -> {
+              // Then
+              assertNotNull(result);
+              user.setId(result.getId());
+              assertEquals(user, result);
+            }).verifyComplete();
 
-    // Then
-    assertNotNull(result);
-    assertNotNull(result.getId());
-    user.setId(result.getId());
-    assertEquals(user, result);
   }
 
   @Test
   void Should_GetUserByItsId_When_FindById() {
     // Given
-    final Address address = new Address();
-    address.setStreetNumber("22");
-    address.setStreetName("Rue Voltaire");
-    address.setPostalCode("75012");
-    address.setCity("Paris");
-    address.setCountry("France");
-
-    final User user = new User();
-    user.setId(12345L);
-    user.setFirstName("Jack");
-    user.setLastName("Sparrow");
-    user.setAddresses(singleton(address));
-
-    final User savedUser = userRepository.save(user);
+    final Optional<User> savedUser = Optional.of(userRepository.save(user));
 
     // When
-    final Optional<User> result = userRepository.findById(savedUser.getId());
-
-    // Then
-    assertNotNull(result);
-    assertTrue(result.isPresent());
-    result.ifPresent(usr -> assertEquals(usr, user));
+    savedUser.ifPresent(su -> {
+      Optional<User> result = userRepository.findById(su.getId());
+      // Then
+      Optionals.ifPresentOrElse(result, res -> assertEquals(user, res), Assertions::fail);
+    });
   }
 
   @Test
   void Should_returnEmptyOptional_When_FindById_ForUserThatNotExistsByTheGivenId() {
     // When
-    final Optional<User> result = userRepository.findById(5678L);
-
-    // Then
-    assertNotNull(result);
-    assertFalse(result.isPresent());
+    StepVerifier.create(Mono.just(userRepository.findById(5678L)))
+            .assertNext(usr -> {
+              // Then
+              assertNotNull(usr);
+              assertFalse(usr.isPresent());
+            })
+            .verifyComplete();
   }
 }

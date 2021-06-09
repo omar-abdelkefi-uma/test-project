@@ -2,8 +2,9 @@ package io.glide.boot.api.dto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
-public class UserRegistrationDto {
+public class UserRegistrationDto implements Serializable {
 
   @NotBlank private String firstName;
 
@@ -53,5 +54,16 @@ public class UserRegistrationDto {
 
   public void setSecondaryAddress(final AddressDto secondaryAddress) {
     this.secondaryAddress = secondaryAddress;
+  }
+
+  @Override
+  public String toString() {
+    return "UserRegistrationDto{" +
+            "firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", department='" + department + '\'' +
+            ", principalAddress=" + principalAddress +
+            ", secondaryAddress=" + secondaryAddress +
+            '}';
   }
 }
