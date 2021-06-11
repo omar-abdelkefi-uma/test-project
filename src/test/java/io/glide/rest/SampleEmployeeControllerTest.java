@@ -1,26 +1,5 @@
 package io.glide.rest;
 
-import io.glide.boot.api.UserApi;
-import io.glide.boot.domain.Department;
-import io.glide.boot.domain.User;
-import io.glide.boot.repository.UserRepository;
-import io.glide.boot.service.impl.UserService;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.reactive.function.BodyInserters;
-
-import java.util.Optional;
-
-import static org.mockito.Mockito.times;
-
 //@ExtendWith(SpringExtension.class)
 //@WebFluxTest(controllers = UserApi.class)
 //@Import(UserService.class)

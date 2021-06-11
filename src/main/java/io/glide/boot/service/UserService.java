@@ -1,4 +1,4 @@
-package io.glide.boot.service.impl;
+package io.glide.boot.service;
 
 import io.glide.boot.domain.User;
 import io.glide.boot.exception.ResourceNotFoundException;

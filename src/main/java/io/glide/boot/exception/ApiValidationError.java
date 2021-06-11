@@ -1,6 +1,11 @@
 package io.glide.boot.exception;
 
-public class ApiValidationError extends ApiSubError {
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import java.io.Serializable;
+
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+public class ApiValidationError implements Serializable {
     private String object;
     private String field;
     private Object rejectedValue;

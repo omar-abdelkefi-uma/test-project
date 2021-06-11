@@ -4,6 +4,7 @@ import io.glide.boot.domain.User;
 import io.glide.boot.exception.ResourceNotFoundException;
 import io.glide.boot.exception.ResourceNotSavedException;
 import io.glide.boot.repository.UserRepository;
+import io.glide.boot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
