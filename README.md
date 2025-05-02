@@ -21,8 +21,8 @@ EN]
 
 The domain model is simple:
 
-1. A user represented by the class [User](src/main/java/io/glide/boot/domain/User.java)
-belong to one department ([Department](src/main/java/io/glide/boot/domain/Department.java))
+1. A user represented by the class [User](src/main/java/org/machinestalk/domain/User.java)
+belong to one department ([Department](src/main/java/org/machinestalk/domain/Department.java))
 
 2. Several users can belong to the same department.
 
@@ -30,9 +30,9 @@ belong to one department ([Department](src/main/java/io/glide/boot/domain/Depart
 
 Le modèle est simple:
 
-1. Un utilisateur représenté par la classe [User](src/main/java/io/glide/boot/domain/User.java)
-appartient à un seul département (classe [Department](src/main/java/io/glide/boot/domain/Department.java))
-et peut avoir une ou plusieurs adresses (classe [Address](src/main/java/io/glide/boot/domain/Address.java)
+1. Un utilisateur représenté par la classe [User](src/main/java/org/machinestalk/domain/User.java)
+appartient à un seul département (classe [Department](src/main/java/org/machinestalk/domain/Department.java))
+et peut avoir une ou plusieurs adresses (classe [Address](src/main/java/org/machinestalk/domain/Address.java)
    
 2. Plusieurs utlilisateurs peuvent appartenir au meme departement.
 
