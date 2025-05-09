@@ -3,7 +3,9 @@ package org.machinestalk.api;
 import org.machinestalk.api.dto.UserDto;
 import org.machinestalk.api.dto.UserRegistrationDto;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import reactor.core.publisher.Mono;
 
@@ -22,7 +24,7 @@ public interface UserApi {
    * @return registered user infos.
    */
   @PostMapping("/users/register")
-  UserDto register(@NotNull @Valid UserRegistrationDto userRegistrationDto);
+  UserDto register(@NotNull @Valid @RequestBody UserRegistrationDto userRegistrationDto);
 
   /**
    * Get user details by id.
@@ -30,6 +32,6 @@ public interface UserApi {
    * @param id user id
    * @return user infos
    */
-  @GetMapping("/users/${userId}")
-  Mono<UserDto> findUserById(long id);
+  @GetMapping("/users/{userId}")
+  Mono<UserDto> findUserById(@PathVariable("userId") long id);
 }
